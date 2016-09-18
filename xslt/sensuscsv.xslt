@@ -71,11 +71,12 @@
             </xsl:call-template>
           </xsl:attribute>
 
-          <divecomputerid deviceid="ffffffff" model="SensusCSV" />
-          <xsl:call-template name="printLine">
-            <xsl:with-param name="line" select="substring-before(//SensusCSV, $lf)"/>
-            <xsl:with-param name="remaining" select="substring-after(//SensusCSV, $lf)"/>
-          </xsl:call-template>
+          <divecomputer deviceid="ffffffff" model="SensusCSV">
+            <xsl:call-template name="printLine">
+              <xsl:with-param name="line" select="substring-before(//SensusCSV, $lf)"/>
+              <xsl:with-param name="remaining" select="substring-after(//SensusCSV, $lf)"/>
+            </xsl:call-template>
+          </divecomputer>
         </dive>
       </dives>
     </divelog>
@@ -142,7 +143,7 @@
           </xsl:call-template>
         </xsl:variable>
         <xsl:attribute name="depth">
-          <xsl:value-of select="$depth div 1000"/>
+          <xsl:value-of select="($depth - 1000) div 100"/>
         </xsl:attribute>
 
           <xsl:variable name="temp">
@@ -175,26 +176,4 @@
       </sample>
   </xsl:template>
 
-  <xsl:template name="getFieldByIndex">
-    <xsl:param name="index"/>
-    <xsl:param name="line"/>
-    <xsl:choose>
-      <xsl:when test="$index > 0">
-        <xsl:call-template name="getFieldByIndex">
-          <xsl:with-param name="index" select="$index -1"/>
-          <xsl:with-param name="line" select="substring-after($line, $fs)"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="substring-before($line,$fs) != ''">
-            <xsl:value-of select="substring-before($line,$fs)"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$line"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
 </xsl:stylesheet>

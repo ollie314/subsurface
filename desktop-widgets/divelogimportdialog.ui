@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DiveLogImportDialog</class>
+ <widget class="QDialog" name="DiveLogImportDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>614</width>
+    <height>434</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Import dive log file</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normalon>:/subsurface-icon</normalon>
+   </iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="horizontalWidget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="verticalWidget" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <item>
+            <widget class="QComboBox" name="knownImports">
+             <property name="currentIndex">
+              <number>-1</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="CSVSeparator"/>
+           </item>
+           <item>
+            <widget class="QComboBox" name="DateFormat">
+             <item>
+              <property name="text">
+               <string>dd.mm.yyyy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>mm/dd/yyyy</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>yyyy-mm-dd</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="DurationFormat">
+             <item>
+              <property name="text">
+               <string>Seconds</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Minutes</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Minutes:seconds</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="CSVUnits">
+             <item>
+              <property name="text">
+               <string>Metric</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Imperial</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="ColumnNameView" name="avaliableColumns">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::IconMode</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="dragInstructions">
+           <property name="text">
+            <string>Drag the tags above to each corresponding column below</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="ColumnDropCSVView" name="tableView">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="horizontalHeaderHighlightSections">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="verticalHeaderHighlightSections">
+            <bool>false</bool>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDialogButtonBox" name="buttonBox">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="standardButtons">
+            <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ColumnNameView</class>
+   <extends>QListView</extends>
+   <header>desktop-widgets/divelogimportdialog.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColumnDropCSVView</class>
+   <extends>QTableView</extends>
+   <header>desktop-widgets/divelogimportdialog.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>DiveLogImportDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>215</x>
+     <y>164</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>DiveLogImportDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>215</x>
+     <y>164</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

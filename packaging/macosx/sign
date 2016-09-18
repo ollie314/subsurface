@@ -1,25 +1,45 @@
-#!/bin/bash
+#!/bin/bash -e
 # Hash is 3A8CE62A483083EDEA5581A61E770EC1FA8BECE8 but it doesn't seem to
 # find the key by hash
 
 echo -- signing staging/Subsurface.app
 cd staging
 
-echo -- signing Qt frameworks
+echo -- signing Qt frameworks and shared libraries
 
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtCore.framework/Versions/4/QtCore
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtDeclarative.framework/Versions/4/QtDeclarative
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtGui.framework/Versions/4/QtGui
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtNetwork.framework/Versions/4/QtNetwork
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtScript.framework/Versions/4/QtScript
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtSql.framework/Versions/4/QtSql
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtSvg.framework/Versions/4/QtSvg
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtWebKit.framework/Versions/4/QtWebkit
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtXml.framework/Versions/4/QtXml
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app//Contents/Frameworks/QtXmlPatterns.framework/Versions/4/QtXmlPatterns
+for i in \
+	./Subsurface.app//Contents/Frameworks/QtConcurrent.framework/Versions/5/QtConcurrent \
+	./Subsurface.app//Contents/Frameworks/QtCore.framework/Versions/5/QtCore \
+	./Subsurface.app//Contents/Frameworks/QtGui.framework/Versions/5/QtGui \
+	./Subsurface.app//Contents/Frameworks/QtMultimedia.framework/Versions/5/QtMultimedia \
+	./Subsurface.app//Contents/Frameworks/QtMultimediaWidgets.framework/Versions/5/QtMultimediaWidgets \
+	./Subsurface.app//Contents/Frameworks/QtNetwork.framework/Versions/5/QtNetwork \
+	./Subsurface.app//Contents/Frameworks/QtOpenGL.framework/Versions/5/QtOpenGL \
+	./Subsurface.app//Contents/Frameworks/QtPositioning.framework/Versions/5/QtPositioning \
+	./Subsurface.app//Contents/Frameworks/QtPrintSupport.framework/Versions/5/QtPrintSupport \
+	./Subsurface.app//Contents/Frameworks/QtQml.framework/Versions/5/QtQml \
+	./Subsurface.app//Contents/Frameworks/QtQuick.framework/Versions/5/QtQuick \
+	./Subsurface.app//Contents/Frameworks/QtScript.framework/Versions/5/QtScript \
+	./Subsurface.app//Contents/Frameworks/QtSensors.framework/Versions/5/QtSensors \
+	./Subsurface.app//Contents/Frameworks/QtSql.framework/Versions/5/QtSql \
+	./Subsurface.app//Contents/Frameworks/QtSvg.framework/Versions/5/QtSvg \
+	./Subsurface.app//Contents/Frameworks/QtWebKit.framework/Versions/5/QtWebKit \
+	./Subsurface.app//Contents/Frameworks/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets \
+	./Subsurface.app//Contents/Frameworks/QtWidgets.framework/Versions/5/QtWidgets \
+	./Subsurface.app//Contents/Frameworks/QtBluetooth.framework/Versions/5/QtBluetooth \
+	./Subsurface.app//Contents/Frameworks/QtDbus.framework/Versions/5/QtDbus \
+	./Subsurface.app//Contents/Frameworks/QtXml.framework/Versions/5/QtXml \
+	./Subsurface.app//Contents/Frameworks/QtWebChannel.framework/Versions/5/QtWebChannel \
+	./Subsurface.app//Contents/Frameworks/*.dylib
+do
+	codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s "Developer ID Application: Dirk Hohndel" $i
+done
 
 echo -- signing plugins
-find ./Subsurface.app/Contents/PlugIns -name \*.dylib | xargs codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk
+for i in $(find ./Subsurface.app/Contents/PlugIns -name \*.dylib -o -name \*.so)
+do
+	codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s "Developer ID Application: Dirk Hohndel" $i
+done
 
 echo -- finally sign .app
-codesign --keychain /Users/hohndel/Library/Keychains/login.keychain -s Dirk ./Subsurface.app
+codesign -v --keychain /Users/hohndel/Library/Keychains/login.keychain -s "Developer ID Application: Dirk Hohndel" ./Subsurface.app

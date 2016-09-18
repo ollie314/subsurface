@@ -1,0 +1,55 @@
+Tool repo to crosscompile subsurface for iOS
+--------------------------------------------
+
+The interaction between the different tools seems quite fragile.
+
+Dependencies:
+
+- This only works on a Mac
+- XCode with iOS SDK and Qt5.6 or later
+- cmake
+
+Steps to install:
+
+Step 1.
+Install current XCode with the iOS SDK
+And QT for android from: http://qt-project.org/downloads, including the iOS bits
+
+Step 2.
+Extract and install these into known directories.
+Have a look in the top of build.sh for where the cross build tool expects
+them. Create a symbolic link named Qt in this directory to point to the top
+of the Qt installation, e.g.
+ln -s ~/Qt5.7.1 Qt
+
+Step 3.
+Run bash build.sh in the terminal.
+The script will download and build the whole dependency chain, but not the actual
+Subsurface-mobile binary
+
+Step 4.
+Launch the version of QtCreator that was installed in Step 2 above and open
+Subsurface-mobile/Subsurface-mobile.pro
+Build Subsurface-mobile in QtCreator - you can build for the simulator and for
+a device and even deploy to a connected device.
+
+Everything up to here you can do without paying for an Apple Developer account.
+
+In order to create a bundle that can be distributed things get even more
+complex and an Apple Developer account definitely is necessary in order for you
+to be able to sign the bundle.
+
+The easiest way to do that appears to be to open the Subsurface-mobile.xcodeproj
+in the build directory that QtCreator used in Xcode and to create an archive there.
+
+
+WARNING:
+========
+
+The version number used in the Subsurface-mobile app is created in step 3.
+So whenever you pull the latest git or commit a change, you need to re-run the
+build.sh script so that the Info.plist used by QtCreator (well, by Xcode under
+the hood) gets updated. Otherwise you will continue to see the old version
+number, even though the sources have been recompiled which can be very
+confusing.
+

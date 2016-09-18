@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:u="http://www.streit.cc/uddf/3.2/"
+  xmlns:u1="http://www.streit.cc/uddf/3.1/"
+  >
 
   <!-- Convert ISO 8601 time format to "standard" date and time format
        -->
@@ -124,7 +127,7 @@
 
       <!-- Handling last value -->
       <xsl:when test="count($values) = 1">
-        <xsl:value-of select="format-number($value + $sum, '#.#')"/>
+        <xsl:value-of select="format-number($value + $sum, '#.###')"/>
       </xsl:when>
 
       <!-- More than one value to sum -->
@@ -142,13 +145,13 @@
     <xsl:param name="units"/>
     <xsl:choose>
       <xsl:when test="$units = 'Imperial'">
-        <xsl:value-of select="count(descendant::temperature[. != 32])"/>
+        <xsl:value-of select="count(descendant::temperature[. != 32]|descendant::u:temperature[. != 32]|descendant::u1:temperature[. != 32])"/>
       </xsl:when>
       <xsl:when test="$units = 'Kelvin'">
-        <xsl:value-of select="count(descendant::temperature[. != 273.15])"/>
+        <xsl:value-of select="count(descendant::temperature[. != 273.15]|descendant::u:temperature[. != 273.15]|descendant::u1:temperature[. != 273.15])"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="count(descendant::temperature[. != 0])"/>
+        <xsl:value-of select="count(descendant::temperature[. != 0]|descendant::u:temperature[. != 0]|descendant::u1:temperature[. != 0])"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -205,4 +208,66 @@
 
     <xsl:value-of select="concat($year, '-', $month, '-', $day, ' ', $time)"/>
   </xsl:template>
+
+  <xsl:template name="getFieldByIndex">
+    <xsl:param name="index"/>
+    <xsl:param name="line"/>
+    <xsl:param name="remaining"/>
+    <xsl:choose>
+      <xsl:when test="$index > 0">
+        <xsl:choose>
+          <xsl:when test="substring($line, 1, 1) = '&quot;'">
+            <xsl:call-template name="getFieldByIndex">
+              <xsl:with-param name="index" select="$index -1"/>
+              <xsl:with-param name="line" select="substring-after($line, $fs)"/>
+              <xsl:with-param name="remaining" select="$remaining"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="getFieldByIndex">
+              <xsl:with-param name="index" select="$index -1"/>
+              <xsl:with-param name="line" select="substring-after($line, $fs)"/>
+              <xsl:with-param name="remaining" select="$remaining"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="substring($line, 1, 1) = '&quot;'">
+            <xsl:choose>
+              <xsl:when test="substring-before(substring-after($line, '&quot;'), '&quot;') != ''">
+                <xsl:value-of select="substring-before(substring-after($line, '&quot;'), '&quot;')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:choose>
+                  <!-- quoted string has new line -->
+                  <xsl:when test="string-length(substring-after($line, '&quot;')) = string-length(translate(substring-after($line, '&quot;'), '&#34;', ''))">
+                    <xsl:value-of select="concat(substring-after($line, '&quot;'), substring-before($remaining, '&quot;'))"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="''"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="substring-before($line,$fs) != ''">
+                <xsl:value-of select="substring-before($line,$fs)"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:if test="substring-after($line, $fs) = ''">
+                  <xsl:value-of select="$line"/>
+                </xsl:if>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 </xsl:stylesheet>
