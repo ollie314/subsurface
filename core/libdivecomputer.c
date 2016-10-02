@@ -498,9 +498,9 @@ static void dc_match_serial(void *_dc, const char *model, uint32_t deviceid, con
 
 	if (!deviceid)
 		return;
-	if (!model || strcasecmp(dc->model, model))
+	if (!dc->model || !model || strcasecmp(dc->model, model))
 		return;
-	if (!serial || strcasecmp(dc->serial, serial))
+	if (!dc->serial || !serial || strcasecmp(dc->serial, serial))
 		return;
 	dc->deviceid = deviceid;
 }
@@ -1033,10 +1033,6 @@ const char *do_libdivecomputer_import(device_data_t *data)
 #ifdef SERIAL_FTDI
 	} else if (!strcmp(data->devname, "ftdi")) {
 		rc = dc_context_set_custom_serial(data->context, &serial_ftdi_ops);
-#endif
-#ifdef SERIAL_CP2130
-	} else if (!strcmp(data->devname, "cp2130")) {
-		rc = dc_context_set_custom_serial(data->context, &cp2130_serial_ops);
 #endif
 	}
 

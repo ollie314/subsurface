@@ -359,6 +359,7 @@ void DiveHeartrateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
 DivePercentageItem::DivePercentageItem(int i)
 {
+	connect(SettingsObjectWrapper::instance()->techDetails, &TechnicalDetailsSettings::percentageGraphChanged, this, &DivePercentageItem::setVisible);
 	tissueIndex = i;
 	settingsChanged();
 }
@@ -426,7 +427,6 @@ void DivePercentageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 		}
 	}
 	painter->restore();
-	connect(SettingsObjectWrapper::instance()->techDetails, &TechnicalDetailsSettings::percentageGraphChanged, this, &DivePercentageItem::setVisible);
 }
 
 DiveAmbPressureItem::DiveAmbPressureItem()
@@ -895,6 +895,13 @@ void DiveCalculatedTissue::setVisible(bool visible)
 void DiveCalculatedTissue::settingsChanged()
 {
 	DiveCalculatedCeiling::setVisible(prefs.calcalltissues && prefs.calcceiling);
+}
+
+DiveReportedCeiling::DiveReportedCeiling()
+{
+	connect(SettingsObjectWrapper::instance()->techDetails, &TechnicalDetailsSettings::dcceilingChanged, this, &DiveReportedCeiling::setVisible);
+	setVisible(prefs.dcceiling);
+	settingsChanged();
 }
 
 void DiveReportedCeiling::modelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)

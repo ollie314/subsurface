@@ -33,7 +33,6 @@ option(NO_USERMANUAL "don't include a viewer for the user manual" OFF)
 option(FBSUPPORT "allow posting to Facebook" ON)
 option(BTSUPPORT "enable support for QtBluetooth (requires Qt5.4 or newer)" ON)
 option(FTDISUPPORT "enable support for libftdi based serial" OFF)
-option(CP2130SUPPORT "enable support for cp2130 based serial" OFF)
 
 # Options regarding What should we build on subsurface
 option(MAKE_TESTS "Make the tests" ON)
@@ -268,6 +267,9 @@ elseif(${SUBSURFACE_TARGET_EXECUTABLE} MATCHES "DesktopExecutable")
 		target_link_libraries(smtk2ssrf smtk_import)
 	endif()
 
+	if(FBSUPPORT)
+		set(FACEBOOK_INTEGRATION facebook_integration)
+	endif()
 	target_link_libraries(
 		${SUBSURFACE_TARGET}
 		subsurface_generated_ui
@@ -445,3 +447,11 @@ endif()
 if (MAKE_TESTS)
 	add_subdirectory(tests)
 endif()
+
+# useful for debugging CMake issues
+#
+# message(STATUS "print variables")
+# get_cmake_property(_variableNames VARIABLES)
+# foreach(_variableName ${_variableNames})
+#	message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()

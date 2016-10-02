@@ -9,7 +9,7 @@
 #include "core/helpers.h"
 
 DiveComputerSettings::DiveComputerSettings(QObject *parent):
-	QObject(parent), group(QStringLiteral("DiveComputer"))
+	QObject(parent)
 {
 }
 
@@ -80,7 +80,7 @@ void DiveComputerSettings::setDownloadMode(int mode)
 	prefs.dive_computer.download_mode = mode;
 }
 
-UpdateManagerSettings::UpdateManagerSettings(QObject *parent) : QObject(parent), group("UpdateManager")
+UpdateManagerSettings::UpdateManagerSettings(QObject *parent) : QObject(parent)
 {
 
 }
@@ -144,11 +144,9 @@ void UpdateManagerSettings::setNextCheck(const QDate& date)
 	emit nextCheckChanged(date);
 }
 
-static QString tecDetails = QStringLiteral("TecDetails");
 
 PartialPressureGasSettings::PartialPressureGasSettings(QObject* parent):
-	QObject(parent),
-	group("TecDetails")
+	QObject(parent)
 {
 
 }
@@ -189,7 +187,7 @@ void PartialPressureGasSettings::setShowPo2(short value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("po2graph", value);
 	prefs.pp_graphs.po2 = value;
 	emit showPo2Changed(value);
@@ -201,7 +199,7 @@ void PartialPressureGasSettings::setShowPn2(short value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("pn2graph", value);
 	prefs.pp_graphs.pn2 = value;
 	emit showPn2Changed(value);
@@ -213,7 +211,7 @@ void PartialPressureGasSettings::setShowPhe(short value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("phegraph", value);
 	prefs.pp_graphs.phe = value;
 	emit showPheChanged(value);
@@ -225,7 +223,7 @@ void PartialPressureGasSettings::setPo2Threshold(double value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("po2threshold", value);
 	prefs.pp_graphs.po2_threshold = value;
 	emit po2ThresholdChanged(value);
@@ -237,7 +235,7 @@ void PartialPressureGasSettings::setPn2Threshold(double value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("pn2threshold", value);
 	prefs.pp_graphs.pn2_threshold = value;
 	emit pn2ThresholdChanged(value);
@@ -249,7 +247,7 @@ void PartialPressureGasSettings::setPheThreshold(double value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("phethreshold", value);
 	prefs.pp_graphs.phe_threshold = value;
 	emit pheThresholdChanged(value);
@@ -309,6 +307,11 @@ int TechnicalDetailsSettings::gflow() const
 int TechnicalDetailsSettings::gfhigh() const
 {
 	return prefs.gfhigh;
+}
+
+short TechnicalDetailsSettings::vpmbConservatism() const
+{
+	return prefs.vpmb_conservatism;
 }
 
 bool TechnicalDetailsSettings::hrgraph() const
@@ -382,7 +385,7 @@ void TechnicalDetailsSettings::setModp02(double value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("modpO2", value);
 	prefs.modpO2 = value;
 	emit modpO2Changed(value);
@@ -394,7 +397,7 @@ void TechnicalDetailsSettings::setShowPicturesInProfile(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("show_pictures_in_profile", value);
 	prefs.show_pictures_in_profile = value;
 	emit showPicturesInProfileChanged(value);
@@ -406,7 +409,7 @@ void TechnicalDetailsSettings::setEad(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("ead", value);
 	prefs.ead = value;
 	emit eadChanged(value);
@@ -418,7 +421,7 @@ void TechnicalDetailsSettings::setMod(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("mod", value);
 	prefs.mod = value;
 	emit modChanged(value);
@@ -430,7 +433,7 @@ void TechnicalDetailsSettings::setDCceiling(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("dcceiling", value);
 	prefs.dcceiling = value;
 	emit dcceilingChanged(value);
@@ -442,7 +445,7 @@ void TechnicalDetailsSettings::setRedceiling(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("redceiling", value);
 	prefs.redceiling = value;
 	emit redceilingChanged(value);
@@ -454,7 +457,7 @@ void TechnicalDetailsSettings::setCalcceiling(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("calcceiling", value);
 	prefs.calcceiling = value;
 	emit calcceilingChanged(value);
@@ -466,7 +469,7 @@ void TechnicalDetailsSettings::setCalcceiling3m(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("calcceiling3m", value);
 	prefs.calcceiling3m = value;
 	emit calcceiling3mChanged(value);
@@ -478,7 +481,7 @@ void TechnicalDetailsSettings::setCalcalltissues(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("calcalltissues", value);
 	prefs.calcalltissues = value;
 	emit calcalltissuesChanged(value);
@@ -490,7 +493,7 @@ void TechnicalDetailsSettings::setCalcndltts(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("calcndltts", value);
 	prefs.calcndltts = value;
 	emit calcndlttsChanged(value);
@@ -502,7 +505,7 @@ void TechnicalDetailsSettings::setGflow(int value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("gflow", value);
 	prefs.gflow = value;
 	set_gf(prefs.gflow, prefs.gfhigh, prefs.gf_low_at_maxdepth);
@@ -515,11 +518,24 @@ void TechnicalDetailsSettings::setGfhigh(int value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("gfhigh", value);
 	prefs.gfhigh = value;
 	set_gf(prefs.gflow, prefs.gfhigh, prefs.gf_low_at_maxdepth);
 	emit gfhighChanged(value);
+}
+
+void TechnicalDetailsSettings::setVpmbConservatism(short value)
+{
+	if (value == prefs.vpmb_conservatism)
+		return;
+
+	QSettings s;
+	s.beginGroup(group);
+	s.setValue("vpmb_conservatism", value);
+	prefs.vpmb_conservatism = value;
+	set_vpmb_conservatism(value);
+	emit vpmbConservatismChanged(value);
 }
 
 void TechnicalDetailsSettings::setHRgraph(bool value)
@@ -528,7 +544,7 @@ void TechnicalDetailsSettings::setHRgraph(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("hrgraph", value);
 	prefs.hrgraph = value;
 	emit hrgraphChanged(value);
@@ -540,7 +556,7 @@ void TechnicalDetailsSettings::setTankBar(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("tankbar", value);
 	prefs.tankbar = value;
 	emit tankBarChanged(value);
@@ -552,7 +568,7 @@ void TechnicalDetailsSettings::setPercentageGraph(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("percentagegraph", value);
 	prefs.percentagegraph = value;
 	emit percentageGraphChanged(value);
@@ -564,7 +580,7 @@ void TechnicalDetailsSettings::setRulerGraph(bool value)
 		return;
 	/* TODO: search for the QSettings of the RulerBar */
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("RulerBar", value);
 	prefs.rulergraph = value;
 	emit rulerGraphChanged(value);
@@ -576,7 +592,7 @@ void TechnicalDetailsSettings::setShowCCRSetpoint(bool value)
 		return;
 
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("show_ccr_setpoint", value);
 	prefs.show_ccr_setpoint = value;
 	emit showCCRSetpointChanged(value);
@@ -587,7 +603,7 @@ void TechnicalDetailsSettings::setShowCCRSensors(bool value)
 	if (value == prefs.show_ccr_sensors)
 		return;
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("show_ccr_sensors", value);
 	prefs.show_ccr_sensors = value;
 	emit showCCRSensorsChanged(value);
@@ -598,7 +614,7 @@ void TechnicalDetailsSettings::setZoomedPlot(bool value)
 	if (value == prefs.zoomed_plot)
 		return;
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("zoomed_plot", value);
 	prefs.zoomed_plot = value;
 	emit zoomedPlotChanged(value);
@@ -609,7 +625,7 @@ void TechnicalDetailsSettings::setShowSac(bool value)
 	if (value == prefs.show_sac)
 		return;
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("show_sac", value);
 	prefs.show_sac = value;
 	emit showSacChanged(value);
@@ -620,7 +636,7 @@ void TechnicalDetailsSettings::setGfLowAtMaxDepth(bool value)
 	if (value == prefs.gf_low_at_maxdepth)
 		return;
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("gf_low_at_maxdepth", value);
 	prefs.gf_low_at_maxdepth = value;
 	set_gf(prefs.gflow, prefs.gfhigh, prefs.gf_low_at_maxdepth);
@@ -632,7 +648,7 @@ void TechnicalDetailsSettings::setDisplayUnusedTanks(bool value)
 	if (value == prefs.display_unused_tanks)
 		return;
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("display_unused_tanks", value);
 	prefs.display_unused_tanks = value;
 	emit displayUnusedTanksChanged(value);
@@ -643,7 +659,7 @@ void TechnicalDetailsSettings::setShowAverageDepth(bool value)
 	if (value == prefs.show_average_depth)
 		return;
 	QSettings s;
-	s.beginGroup(tecDetails);
+	s.beginGroup(group);
 	s.setValue("show_average_depth", value);
 	prefs.show_average_depth = value;
 	emit showAverageDepthChanged(value);
@@ -713,8 +729,7 @@ void FacebookSettings::setAlbumId(const QString& value)
 
 
 GeocodingPreferences::GeocodingPreferences(QObject *parent) :
-	QObject(parent),
-	group(QStringLiteral("geocoding"))
+	QObject(parent)
 {
 
 }
@@ -816,8 +831,7 @@ void GeocodingPreferences::setThirdTaxonomyCategory(taxonomy_category value)
 }
 
 ProxySettings::ProxySettings(QObject *parent) :
-	QObject(parent),
-	group(QStringLiteral("Network"))
+	QObject(parent)
 {
 }
 
@@ -921,8 +935,7 @@ void ProxySettings::setPass(const QString& value)
 }
 
 CloudStorageSettings::CloudStorageSettings(QObject *parent) :
-	QObject(parent),
-	group(QStringLiteral("CloudStorage"))
+	QObject(parent)
 {
 
 }
@@ -1119,8 +1132,7 @@ void CloudStorageSettings::setGitLocalOnly(bool value)
 }
 
 DivePlannerSettings::DivePlannerSettings(QObject *parent) :
-	QObject(parent),
-	group(QStringLiteral("Planner"))
+	QObject(parent)
 {
 }
 
@@ -1227,11 +1239,6 @@ int DivePlannerSettings::bottomSac() const
 int DivePlannerSettings::decoSac() const
 {
 	return prefs.decosac;
-}
-
-short DivePlannerSettings::conservatismLevel() const
-{
-	return prefs.conservatism_level;
 }
 
 deco_mode DivePlannerSettings::decoMode() const
@@ -1484,18 +1491,6 @@ void DivePlannerSettings::setSecoSac(int value)
 	emit decoSacChanged(value);
 }
 
-void DivePlannerSettings::setConservatismLevel(int value)
-{
-	if (value == prefs.conservatism_level)
-		return;
-
-	QSettings s;
-	s.beginGroup(group);
-	s.setValue("conservatism", value);
-	prefs.conservatism_level = value;
-	emit conservatismLevelChanged(value);
-}
-
 void DivePlannerSettings::setDecoMode(deco_mode value)
 {
 	if (value == prefs.deco_mode)
@@ -1509,8 +1504,7 @@ void DivePlannerSettings::setDecoMode(deco_mode value)
 }
 
 UnitsSettings::UnitsSettings(QObject *parent) :
-	QObject(parent),
-	group(QStringLiteral("Units"))
+	QObject(parent)
 {
 
 }
@@ -1636,8 +1630,8 @@ void UnitsSettings::setCoordinatesTraditional(bool value)
 void UnitsSettings::setUnitSystem(const QString& value)
 {
 	short int v = value == QStringLiteral("metric") ? METRIC
-	              : value == QStringLiteral("imperial")? IMPERIAL
-	              : PERSONALIZE;
+		      : value == QStringLiteral("imperial")? IMPERIAL
+		      : PERSONALIZE;
 
 	if (v == prefs.unit_system)
 		return;
@@ -1661,8 +1655,7 @@ void UnitsSettings::setUnitSystem(const QString& value)
 }
 
 GeneralSettingsObjectWrapper::GeneralSettingsObjectWrapper(QObject *parent) :
-	QObject(parent),
-	group(QStringLiteral("GeneralSettings"))
+	QObject(parent)
 {
 }
 
@@ -1792,8 +1785,7 @@ void GeneralSettingsObjectWrapper::setPscrRatio(int value)
 }
 
 DisplaySettingsObjectWrapper::DisplaySettingsObjectWrapper(QObject *parent) :
-	QObject(parent),
-	group(QStringLiteral("Display"))
+	QObject(parent)
 {
 }
 
@@ -1859,8 +1851,7 @@ void DisplaySettingsObjectWrapper::setDisplayInvalidDives(short value)
 }
 
 LanguageSettingsObjectWrapper::LanguageSettingsObjectWrapper(QObject *parent) :
-	QObject(parent),
-	group("Language")
+	QObject(parent)
 {
 }
 
@@ -1908,6 +1899,17 @@ void LanguageSettingsObjectWrapper::setUseSystemLanguage(bool value)
 	s.setValue("UseSystemLanguage", value);
 	prefs.locale.use_system_language = copy_string(qPrintable(value));
 	emit useSystemLanguageChanged(value);
+}
+
+void  LanguageSettingsObjectWrapper::setLangLocale(const QString &value)
+{
+	if (value == prefs.locale.lang_locale)
+		return;
+	QSettings s;
+	s.beginGroup(group);
+	s.setValue("UiLangLocale", value);
+	prefs.locale.lang_locale = copy_string(qPrintable(value));
+	// no need to emit languageChanged since we already do this for setLanguage
 }
 
 void  LanguageSettingsObjectWrapper::setLanguage(const QString& value)
@@ -1980,9 +1982,7 @@ void  LanguageSettingsObjectWrapper::setDateFormatOverride(bool value)
 }
 
 AnimationsSettingsObjectWrapper::AnimationsSettingsObjectWrapper(QObject* parent):
-	QObject(parent),
-	group("Animations")
-
+	QObject(parent)
 {
 }
 
@@ -2004,8 +2004,7 @@ void AnimationsSettingsObjectWrapper::setAnimationSpeed(int value)
 }
 
 LocationServiceSettingsObjectWrapper::LocationServiceSettingsObjectWrapper(QObject* parent):
-	QObject(parent),
-	group("locationService")
+	QObject(parent)
 {
 }
 
@@ -2108,11 +2107,13 @@ void SettingsObjectWrapper::load()
 	GET_BOOL("percentagegraph", percentagegraph);
 	GET_INT("gflow", gflow);
 	GET_INT("gfhigh", gfhigh);
+	GET_INT("vpmb_conservatism", vpmb_conservatism);
 	GET_BOOL("gf_low_at_maxdepth", gf_low_at_maxdepth);
 	GET_BOOL("show_ccr_setpoint",show_ccr_setpoint);
 	GET_BOOL("show_ccr_sensors",show_ccr_sensors);
 	GET_BOOL("zoomed_plot", zoomed_plot);
 	set_gf(prefs.gflow, prefs.gfhigh, prefs.gf_low_at_maxdepth);
+	set_vpmb_conservatism(prefs.vpmb_conservatism);
 	GET_BOOL("show_sac", show_sac);
 	GET_BOOL("display_unused_tanks", display_unused_tanks);
 	GET_BOOL("show_average_depth", show_average_depth);
@@ -2248,7 +2249,13 @@ void SettingsObjectWrapper::load()
 	prefs.drop_stone_mode = s.value("drop_stone_mode", prefs.drop_stone_mode).toBool();
 	prefs.bottomsac = s.value("bottomsac", prefs.bottomsac).toInt();
 	prefs.decosac = s.value("decosac", prefs.decosac).toInt();
-	prefs.conservatism_level = s.value("conservatism", prefs.conservatism_level).toInt();
+	s.endGroup();
+
+	s.beginGroup("DiveComputer");
+	GET_TXT("dive_computer_vendor",dive_computer.vendor);
+	GET_TXT("dive_computer_product", dive_computer.product);
+	GET_TXT("dive_computer_device", dive_computer.device);
+	GET_INT("dive_computer_download_mode", dive_computer.download_mode);
 	s.endGroup();
 
 	s.beginGroup("UpdateManager");
@@ -2285,7 +2292,6 @@ void SettingsObjectWrapper::sync()
 	s.setValue("bottomsac", prefs.bottomsac);
 	s.setValue("decosac", prefs.decosac);
 	s.setValue("deco_mode", int(prefs.deco_mode));
-	s.setValue("conservatism", prefs.conservatism_level);
 	s.endGroup();
 }
 

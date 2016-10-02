@@ -494,8 +494,8 @@ QString uiLanguage(QLocale *callerLoc)
 	s.beginGroup("Language");
 	GET_BOOL("UseSystemLanguage", locale.use_system_language);
 
-	if (!s.value("UseSystemLanguage", true).toBool()) {
-		loc = QLocale(s.value("UiLanguage", QLocale().uiLanguages().first()).toString());
+	if (!prefs.locale.use_system_language) {
+		loc = QLocale(s.value("UiLangLocale", QLocale().uiLanguages().first()).toString());
 	} else {
 		loc = QLocale(QLocale().uiLanguages().first());
 	}
@@ -509,6 +509,7 @@ QString uiLanguage(QLocale *callerLoc)
 		uiLang = languages[2];
 	else
 		uiLang = languages[0];
+	prefs.locale.lang_locale = copy_string(qPrintable(uiLang));
 	GET_BOOL("time_format_override", time_format_override);
 	GET_BOOL("date_format_override", date_format_override);
 	GET_TXT("time_format", time_format);

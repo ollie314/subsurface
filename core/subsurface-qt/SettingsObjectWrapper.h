@@ -37,9 +37,10 @@ signals:
 	void deviceChanged(const QString& device);
 	void downloadModeChanged(int mode);
 private:
-	QString group;
+	const QString group = QStringLiteral("DiveComputer");
 
 };
+
 class UpdateManagerSettings : public QObject {
 	Q_OBJECT
 	Q_PROPERTY(bool dont_check_for_updates READ dontCheckForUpdates WRITE setDontCheckForUpdates NOTIFY dontCheckForUpdatesChanged)
@@ -62,7 +63,7 @@ signals:
 	void lastVersionUsedChanged(const QString& value);
 	void nextCheckChanged(const QDate& date);
 private:
-	QString group;
+	const QString group = QStringLiteral("UpdateManager");
 };
 
 /* Control the state of the Partial Pressure Graphs preferences */
@@ -99,8 +100,9 @@ signals:
 	void po2ThresholdChanged(double value);
 	void pn2ThresholdChanged(double value);
 	void pheThresholdChanged(double value);
+
 private:
-	QString group;
+	const QString group = QStringLiteral("TecDetails");
 };
 
 class TechnicalDetailsSettings : public QObject {
@@ -116,6 +118,7 @@ class TechnicalDetailsSettings : public QObject {
 	Q_PROPERTY(bool calcndltts       READ calcndltts      WRITE setCalcndltts      NOTIFY calcndlttsChanged)
 	Q_PROPERTY(int gflow            READ gflow           WRITE setGflow           NOTIFY gflowChanged)
 	Q_PROPERTY(int gfhigh           READ gfhigh          WRITE setGfhigh          NOTIFY gfhighChanged)
+	Q_PROPERTY(short vpmb_conservatism READ vpmbConservatism WRITE setVpmbConservatism NOTIFY vpmbConservatismChanged)
 	Q_PROPERTY(bool hrgraph          READ hrgraph         WRITE setHRgraph         NOTIFY hrgraphChanged)
 	Q_PROPERTY(bool tankbar          READ tankBar         WRITE setTankBar         NOTIFY tankBarChanged)
 	Q_PROPERTY(bool percentagegraph  READ percentageGraph WRITE setPercentageGraph NOTIFY percentageGraphChanged)
@@ -142,6 +145,7 @@ public:
 	bool calcndltts() const;
 	int gflow() const;
 	int gfhigh() const;
+	short vpmbConservatism() const;
 	bool hrgraph() const;
 	bool tankBar() const;
 	bool percentageGraph() const;
@@ -167,6 +171,7 @@ public slots:
 	void setCalcndltts(bool value);
 	void setGflow(int value);
 	void setGfhigh(int value);
+	void setVpmbConservatism(short);
 	void setHRgraph(bool value);
 	void setTankBar(bool value);
 	void setPercentageGraph(bool value);
@@ -192,6 +197,7 @@ signals:
 	void calcndlttsChanged(bool value);
 	void gflowChanged(int value);
 	void gfhighChanged(int value);
+	void vpmbConservatismChanged(short value);
 	void hrgraphChanged(bool value);
 	void tankBarChanged(bool value);
 	void percentageGraphChanged(bool value);
@@ -204,6 +210,9 @@ signals:
 	void displayUnusedTanksChanged(bool value);
 	void showAverageDepthChanged(bool value);
 	void showPicturesInProfileChanged(bool value);
+
+private:
+	const QString group = QStringLiteral("TecDetails");
 };
 
 /* Control the state of the Facebook preferences */
@@ -267,7 +276,7 @@ signals:
 	void secondTaxonomyCategoryChanged(taxonomy_category value);
 	void thirdTaxonomyCategoryChanged(taxonomy_category value);
 private:
-	QString group;
+	const QString group = QStringLiteral("geocoding");
 };
 
 class ProxySettings : public QObject {
@@ -304,7 +313,7 @@ signals:
 	void userChanged(const QString& value);
 	void passChanged(const QString& value);
 private:
-	QString group;
+	const QString group = QStringLiteral("Network");
 };
 
 class CloudStorageSettings : public QObject {
@@ -365,7 +374,7 @@ signals:
 	void saveUserIdLocalChanged(short value);
 
 private:
-	QString group;
+	const QString group = QStringLiteral("CloudStorage");
 };
 
 class DivePlannerSettings : public QObject {
@@ -391,7 +400,6 @@ class DivePlannerSettings : public QObject {
 	Q_PROPERTY(int min_switch_duration  READ minSwitchDuration    WRITE setMinSwitchDuration    NOTIFY minSwitchDurationChanged)
 	Q_PROPERTY(int bottomsac            READ bottomSac            WRITE setBottomSac            NOTIFY bottomSacChanged)
 	Q_PROPERTY(int decosac              READ decoSac              WRITE setSecoSac              NOTIFY decoSacChanged)
-	Q_PROPERTY(short conservatism_level READ conservatismLevel    WRITE setConservatismLevel    NOTIFY conservatismLevelChanged)
 	Q_PROPERTY(deco_mode decoMode       READ decoMode             WRITE setDecoMode             NOTIFY decoModeChanged)
 
 public:
@@ -417,7 +425,6 @@ public:
 	int minSwitchDuration() const;
 	int bottomSac() const;
 	int decoSac() const;
-	short conservatismLevel() const;
 	deco_mode decoMode() const;
 
 public slots:
@@ -442,7 +449,6 @@ public slots:
 	void setMinSwitchDuration(int value);
 	void setBottomSac(int value);
 	void setSecoSac(int value);
-	void setConservatismLevel(int value);
 	void setDecoMode(deco_mode value);
 
 signals:
@@ -467,11 +473,10 @@ signals:
 	void minSwitchDurationChanged(int value);
 	void bottomSacChanged(int value);
 	void decoSacChanged(int value);
-	void conservatismLevelChanged(int value);
 	void decoModeChanged(deco_mode value);
 
 private:
-	QString group;
+	const QString group = QStringLiteral("Planner");
 };
 
 class UnitsSettings : public QObject {
@@ -516,7 +521,7 @@ signals:
 	void unitSystemChanged(const QString& value);
 	void coordinatesTraditionalChanged(bool value);
 private:
-	QString group;
+	const QString group = QStringLiteral("Units");
 };
 
 class GeneralSettingsObjectWrapper : public QObject {
@@ -557,7 +562,7 @@ signals:
 	void o2ConsumptionChanged(int value);
 	void pscrRatioChanged(int value);
 private:
-	QString group;
+	const QString group = QStringLiteral("GeneralSettings");
 };
 
 class DisplaySettingsObjectWrapper : public QObject {
@@ -579,7 +584,7 @@ signals:
 	void fontSizeChanged(double value);
 	void displayInvalidDivesChanged(short value);
 private:
-	QString group;
+	const QString group = QStringLiteral("Display");
 };
 
 class LanguageSettingsObjectWrapper : public QObject {
@@ -603,6 +608,7 @@ public:
 	bool useSystemLanguage() const;
 
 public slots:
+	void  setLangLocale         (const QString& value);
 	void  setLanguage           (const QString& value);
 	void  setTimeFormat         (const QString& value);
 	void  setDateFormat         (const QString& value);
@@ -620,7 +626,7 @@ signals:
 	void useSystemLanguageChanged(bool value);
 
 private:
-	QString group;
+	const QString group = QStringLiteral("Language");
 };
 
 class AnimationsSettingsObjectWrapper : public QObject {
@@ -637,7 +643,7 @@ signals:
 	void animationSpeedChanged(int value);
 
 private:
-	QString group;
+	const QString group = QStringLiteral("Animations");
 };
 
 class LocationServiceSettingsObjectWrapper : public QObject {
@@ -655,7 +661,7 @@ signals:
 	void timeThresholdChanged(int value);
 	void distanceThresholdChanged(int value);
 private:
-	QString group;
+	const QString group = QStringLiteral("locationService");
 };
 
 class SettingsObjectWrapper : public QObject {

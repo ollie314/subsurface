@@ -34,6 +34,7 @@ typedef struct {
 
 typedef struct {
 	const char *language;
+	const char *lang_locale;
 	bool use_system_language;
 } locale_prefs_t;
 
@@ -142,7 +143,7 @@ struct preferences {
 	bool cloud_background_sync;
 	geocoding_prefs_t geocoding;
 	enum deco_mode deco_mode;
-	short conservatism_level;
+	short vpmb_conservatism;
 	int time_threshold;
 	int distance_threshold;
 	bool git_local_only;
