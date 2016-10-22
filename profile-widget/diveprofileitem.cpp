@@ -385,19 +385,22 @@ void DivePercentageItem::modelDataChanged(const QModelIndex &topLeft, const QMod
 		texts.last()->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 }
 
-QColor DivePercentageItem::ColorScale(double value)
+QColor DivePercentageItem::ColorScale(double value, int inert)
 {
 	QColor color;
-	double scaledValue = value / (AMB_PERCENTAGE * N2_IN_AIR) * 1000.0;
-
+	double scaledValue = value / (AMB_PERCENTAGE * inert) * 1000.0;
 	if (scaledValue < 0.8)	// grade from cyan to blue to purple
 		color.setHsvF(0.5 + 0.25 * scaledValue / 0.8, 1.0, 1.0);
 	else if (scaledValue < 1.0)	// grade from magenta to black
 		color.setHsvF(0.75, 1.0, (1.0 - scaledValue) / 0.2);
-	else if (value < 55)	// grade from black to green
-		color.setHsvF(0.333, 1.0, (value - AMB_PERCENTAGE * N2_IN_AIR / 1000.0) / (55.0 - AMB_PERCENTAGE * N2_IN_AIR / 1000.0));
-	else if (value < 100)		// grade from green to yellow to red
-		color.setHsvF(0.333 * (100.0 - value) / 45.0, 1.0, 1.0);
+	else if (value < AMB_PERCENTAGE)	// grade from black to bright green
+		color.setHsvF(0.333, 1.0, (value - AMB_PERCENTAGE * inert / 1000.0) / (AMB_PERCENTAGE - AMB_PERCENTAGE * inert / 1000.0));
+	else if (value < 65)		// grade from bright green (0% M) to yellow-green (30% M)
+		color.setHsvF(0.333 - 0.133 * (value - AMB_PERCENTAGE) / (65.0 - AMB_PERCENTAGE), 1.0, 1.0);
+	else if (value < 85)		// grade from yellow-green (30% M) to orange (70% M)
+		color.setHsvF(0.2 - 0.1 * (value - 65.0) / 20.0, 1.0, 1.0);
+	else if (value < 100)		// grade from orange (70% M) to red (100% M)
+		color.setHsvF(0.1 * (100.0 - value) / 15.0, 1.0, 1.0);
 	else if (value < 120)		// M value exceeded - grade from red to white
 		color.setHsvF(0.0, 1 - (value - 100.0) / 20.0, 1.0);
 	else	// white
@@ -415,15 +418,17 @@ void DivePercentageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 		return;
 	painter->save();
 	QPen mypen;
+	mypen.setWidthF(vAxis->posAtValue(0) - vAxis->posAtValue(4));
 	mypen.setCosmetic(false);
-	mypen.setWidth(5);
 	QPolygonF poly = polygon();
-	for (int i = 0, modelDataCount = dataModel->rowCount(); i < modelDataCount; i++) {
+	for (int i = 1, modelDataCount = dataModel->rowCount(); i < modelDataCount; i++) {
 		if (i < poly.count()) {
 			double value = dataModel->index(i, vDataColumn).data().toDouble();
-			mypen.setBrush(QBrush(ColorScale(value)));
+			int cyl = dataModel->index(i, DivePlotDataModel::CYLINDERINDEX).data().toInt();
+			int inert = 1000 - get_o2(&displayed_dive.cylinder[cyl].gasmix);
+			mypen.setBrush(QBrush(ColorScale(value, inert)));
 			painter->setPen(mypen);
-			painter->drawPoint(poly[i]);
+			painter->drawLine(poly[i - 1], poly[i]);
 		}
 	}
 	painter->restore();

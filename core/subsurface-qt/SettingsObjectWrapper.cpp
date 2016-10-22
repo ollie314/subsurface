@@ -299,6 +299,11 @@ bool TechnicalDetailsSettings::calcndltts() const
 	return prefs.calcndltts;
 }
 
+bool TechnicalDetailsSettings::buehlmann() const
+{
+	return (prefs.deco_mode == BUEHLMANN);
+}
+
 int TechnicalDetailsSettings::gflow() const
 {
 	return prefs.gflow;
@@ -497,6 +502,17 @@ void TechnicalDetailsSettings::setCalcndltts(bool value)
 	s.setValue("calcndltts", value);
 	prefs.calcndltts = value;
 	emit calcndlttsChanged(value);
+}
+
+void TechnicalDetailsSettings::setBuehlmann(bool value)
+{
+	if (value == (prefs.deco_mode == BUEHLMANN))
+		return;
+	QSettings s;
+	s.beginGroup(group);
+	s.setValue("buehlmann", value);
+	prefs.deco_mode = value ? BUEHLMANN : VPMB;
+	emit buehlmannChanged(value);
 }
 
 void TechnicalDetailsSettings::setGflow(int value)
@@ -850,7 +866,7 @@ int ProxySettings::port() const
 	return prefs.proxy_port;
 }
 
-short ProxySettings::auth() const
+bool ProxySettings::auth() const
 {
 	return prefs.proxy_auth;
 }
@@ -899,7 +915,7 @@ void ProxySettings::setPort(int value)
 	emit portChanged(value);
 }
 
-void ProxySettings::setAuth(short value)
+void ProxySettings::setAuth(bool value)
 {
 	if (value == prefs.proxy_auth)
 		return;
@@ -1479,7 +1495,7 @@ void DivePlannerSettings::setBottomSac(int value)
 	emit bottomSacChanged(value);
 }
 
-void DivePlannerSettings::setSecoSac(int value)
+void DivePlannerSettings::setDecoSac(int value)
 {
 	if (value == prefs.decosac)
 		return;
@@ -1541,7 +1557,9 @@ int UnitsSettings::verticalSpeedTime() const
 
 QString UnitsSettings::unitSystem() const
 {
-	return QString(); /*FIXME: there's no char * units on the prefs. */
+	return prefs.unit_system == METRIC ? QStringLiteral("metric")
+			: prefs.unit_system == IMPERIAL ? QStringLiteral("imperial")
+			: QStringLiteral("personalized");
 }
 
 bool UnitsSettings::coordinatesTraditional() const
@@ -1890,6 +1908,11 @@ bool LanguageSettingsObjectWrapper::useSystemLanguage() const
 	return prefs.locale.use_system_language;
 }
 
+QString LanguageSettingsObjectWrapper::langLocale() const
+{
+	return prefs.locale.lang_locale;
+}
+
 void LanguageSettingsObjectWrapper::setUseSystemLanguage(bool value)
 {
 	if (value == prefs.locale.use_system_language)
@@ -1909,7 +1932,7 @@ void  LanguageSettingsObjectWrapper::setLangLocale(const QString &value)
 	s.beginGroup(group);
 	s.setValue("UiLangLocale", value);
 	prefs.locale.lang_locale = copy_string(qPrintable(value));
-	// no need to emit languageChanged since we already do this for setLanguage
+	emit langLocaleChanged(value);
 }
 
 void  LanguageSettingsObjectWrapper::setLanguage(const QString& value)
@@ -2105,6 +2128,11 @@ void SettingsObjectWrapper::load()
 	GET_BOOL("tankbar", tankbar);
 	GET_BOOL("RulerBar", rulergraph);
 	GET_BOOL("percentagegraph", percentagegraph);
+	v = s.value("buehlmann");
+	if (v.isValid())
+		prefs.deco_mode = v.toBool() ? BUEHLMANN : VPMB;
+	else
+		prefs.deco_mode = BUEHLMANN;
 	GET_INT("gflow", gflow);
 	GET_INT("gfhigh", gfhigh);
 	GET_INT("vpmb_conservatism", vpmb_conservatism);
@@ -2208,13 +2236,11 @@ void SettingsObjectWrapper::load()
 
 	// GeoManagement
 	s.beginGroup("geocoding");
-#ifdef DISABLED
+
 	GET_BOOL("enable_geocoding", geocoding.enable_geocoding);
-	GET_BOOL("parse_dive_without_gps", geocoding.parse_dive_without_gps);
+	GET_BOOL("parse_dives_without_gps", geocoding.parse_dive_without_gps);
 	GET_BOOL("tag_existing_dives", geocoding.tag_existing_dives);
-#else
-	prefs.geocoding.enable_geocoding = true;
-#endif
+
 	GET_ENUM("cat0", taxonomy_category, geocoding.category[0]);
 	GET_ENUM("cat1", taxonomy_category, geocoding.category[1]);
 	GET_ENUM("cat2", taxonomy_category, geocoding.category[2]);

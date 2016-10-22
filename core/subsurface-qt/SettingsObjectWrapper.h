@@ -116,6 +116,7 @@ class TechnicalDetailsSettings : public QObject {
 	Q_PROPERTY(bool calcceiling3m    READ calcceiling3m   WRITE setCalcceiling3m   NOTIFY calcceiling3mChanged)
 	Q_PROPERTY(bool calcalltissues   READ calcalltissues  WRITE setCalcalltissues  NOTIFY calcalltissuesChanged)
 	Q_PROPERTY(bool calcndltts       READ calcndltts      WRITE setCalcndltts      NOTIFY calcndlttsChanged)
+	Q_PROPERTY(bool buehlmann        READ buehlmann       WRITE setBuehlmann       NOTIFY buehlmannChanged)
 	Q_PROPERTY(int gflow            READ gflow           WRITE setGflow           NOTIFY gflowChanged)
 	Q_PROPERTY(int gfhigh           READ gfhigh          WRITE setGfhigh          NOTIFY gfhighChanged)
 	Q_PROPERTY(short vpmb_conservatism READ vpmbConservatism WRITE setVpmbConservatism NOTIFY vpmbConservatismChanged)
@@ -143,6 +144,7 @@ public:
 	bool calcceiling3m() const;
 	bool calcalltissues() const;
 	bool calcndltts() const;
+	bool buehlmann() const;
 	int gflow() const;
 	int gfhigh() const;
 	short vpmbConservatism() const;
@@ -169,6 +171,7 @@ public slots:
 	void setCalcceiling3m(bool value);
 	void setCalcalltissues(bool value);
 	void setCalcndltts(bool value);
+	void setBuehlmann(bool value);
 	void setGflow(int value);
 	void setGfhigh(int value);
 	void setVpmbConservatism(short);
@@ -195,6 +198,7 @@ signals:
 	void calcceiling3mChanged(bool value);
 	void calcalltissuesChanged(bool value);
 	void calcndlttsChanged(bool value);
+	void buehlmannChanged(bool value);
 	void gflowChanged(int value);
 	void gfhighChanged(int value);
 	void vpmbConservatismChanged(short value);
@@ -264,9 +268,9 @@ public slots:
 	void setEnableGeocoding(bool value);
 	void setParseDiveWithoutGps(bool value);
 	void setTagExistingDives(bool value);
-	void  setFirstTaxonomyCategory(taxonomy_category value);
-	void  setSecondTaxonomyCategory(taxonomy_category value);
-	void  setThirdTaxonomyCategory(taxonomy_category value);
+	void setFirstTaxonomyCategory(taxonomy_category value);
+	void setSecondTaxonomyCategory(taxonomy_category value);
+	void setThirdTaxonomyCategory(taxonomy_category value);
 
 signals:
 	void enableGeocodingChanged(bool value);
@@ -284,7 +288,7 @@ class ProxySettings : public QObject {
 	Q_PROPERTY(int type     READ type WRITE setType NOTIFY typeChanged)
 	Q_PROPERTY(QString host READ host WRITE setHost NOTIFY hostChanged)
 	Q_PROPERTY(int port     READ port WRITE setPort NOTIFY portChanged)
-	Q_PROPERTY(short auth   READ auth WRITE setAuth NOTIFY authChanged)
+	Q_PROPERTY(bool  auth READ auth WRITE setAuth NOTIFY authChanged)
 	Q_PROPERTY(QString user READ user WRITE setUser NOTIFY userChanged)
 	Q_PROPERTY(QString pass READ pass WRITE setPass NOTIFY passChanged)
 
@@ -293,7 +297,7 @@ public:
 	int type() const;
 	QString host() const;
 	int port() const;
-	short auth() const;
+	bool auth() const;
 	QString user() const;
 	QString pass() const;
 
@@ -301,7 +305,7 @@ public slots:
 	void setType(int value);
 	void setHost(const QString& value);
 	void setPort(int value);
-	void setAuth(short value);
+	void setAuth(bool value);
 	void setUser(const QString& value);
 	void setPass(const QString& value);
 
@@ -309,7 +313,7 @@ signals:
 	void typeChanged(int value);
 	void hostChanged(const QString& value);
 	void portChanged(int value);
-	void authChanged(short value);
+	void authChanged(bool value);
 	void userChanged(const QString& value);
 	void passChanged(const QString& value);
 private:
@@ -399,7 +403,7 @@ class DivePlannerSettings : public QObject {
 	Q_PROPERTY(int reserve_gas          READ reserveGas           WRITE setReserveGas           NOTIFY reserveGasChanged)
 	Q_PROPERTY(int min_switch_duration  READ minSwitchDuration    WRITE setMinSwitchDuration    NOTIFY minSwitchDurationChanged)
 	Q_PROPERTY(int bottomsac            READ bottomSac            WRITE setBottomSac            NOTIFY bottomSacChanged)
-	Q_PROPERTY(int decosac              READ decoSac              WRITE setSecoSac              NOTIFY decoSacChanged)
+	Q_PROPERTY(int decosac              READ decoSac              WRITE setDecoSac              NOTIFY decoSacChanged)
 	Q_PROPERTY(deco_mode decoMode       READ decoMode             WRITE setDecoMode             NOTIFY decoModeChanged)
 
 public:
@@ -448,7 +452,7 @@ public slots:
 	void setReserveGas(int value);
 	void setMinSwitchDuration(int value);
 	void setBottomSac(int value);
-	void setSecoSac(int value);
+	void setDecoSac(int value);
 	void setDecoMode(deco_mode value);
 
 signals:
@@ -593,6 +597,7 @@ class LanguageSettingsObjectWrapper : public QObject {
 	Q_PROPERTY(QString time_format       READ timeFormat         WRITE setTimeFormat         NOTIFY timeFormatChanged)
 	Q_PROPERTY(QString date_format       READ dateFormat         WRITE setDateFormat         NOTIFY dateFormatChanged)
 	Q_PROPERTY(QString date_format_short READ dateFormatShort    WRITE setDateFormatShort    NOTIFY dateFormatShortChanged)
+	Q_PROPERTY(QString lang_locale       READ langLocale         WRITE setLangLocale         NOTIFY langLocaleChanged)
 	Q_PROPERTY(bool time_format_override READ timeFormatOverride WRITE setTimeFormatOverride NOTIFY timeFormatOverrideChanged)
 	Q_PROPERTY(bool date_format_override READ dateFormatOverride WRITE setDateFormatOverride NOTIFY dateFormatOverrideChanged)
 	Q_PROPERTY(bool use_system_language  READ useSystemLanguage  WRITE setUseSystemLanguage  NOTIFY useSystemLanguageChanged)
@@ -600,6 +605,7 @@ class LanguageSettingsObjectWrapper : public QObject {
 public:
 	LanguageSettingsObjectWrapper(QObject *parent);
 	QString language() const;
+	QString langLocale() const;
 	QString timeFormat() const;
 	QString dateFormat() const;
 	QString dateFormatShort() const;
@@ -618,6 +624,7 @@ public slots:
 	void  setUseSystemLanguage  (bool value);
 signals:
 	void languageChanged(const QString& value);
+	void langLocaleChanged(const QString& value);
 	void timeFormatChanged(const QString& value);
 	void dateFormatChanged(const QString& value);
 	void dateFormatShortChanged(const QString& value);
